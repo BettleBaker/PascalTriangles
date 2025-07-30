@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pascal's Triangle & Golden Ratio</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fefefe;
+      --fg: #0c0c0c;
+      --accent: #3a86ff;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: var(--bg);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav h1 {
+      font-size: 1.5rem;
+      color: var(--accent);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      font-size: 18px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem;
+      background: linear-gradient(135deg, #e0f7ff, #f9f9ff);
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      z-index: 2;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #555;
+      z-index: 2;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 3rem 2rem;
+      background-color: #fff;
+    }
+
+    .card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .generator {
+      padding: 4rem 2rem;
+      background-color: #f0f8ff;
+      text-align: center;
+    }
+
+    .generator input {
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      outline: none;
+      margin-right: 1rem;
+    }
+
+    .generator button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    .output {
+      margin-top: 2rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 20px;
+    }
+
+    .golden-ratio {
+      padding: 4rem 2rem;
+      background-color: #fff3e0;
+      text-align: center;
+    }
+
+    .golden-ratio h2 {
+      font-size: 2rem;
+      color: #d97706;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background: #222;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+
+    /* 3D Cube Styling */
+    .cube-container {
+      width: 200px;
+      height: 200px;
+      perspective: 800px;
+      margin-top:-180px;
+      z-index: 2;
+      position: relative;
+      right: -850px;
+    }
+
+    .cube {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: spin 10s linear infinite;
+    }
+
+    .face {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: skyblue;
+      border: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      font-weight: bold;
+      color: white;
+      border-radius: 15px;
+    }
+
+    .front  { transform: translateZ(100px); }
+    .back   { transform: rotateY(180deg) translateZ(100px); }
+    .right  { transform: rotateY(90deg) translateZ(100px); }
+    .left   { transform: rotateY(-90deg) translateZ(100px); }
+    .top    { transform: rotateX(90deg) translateZ(100px); }
+    .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+    @keyframes spin {
+      0%   { transform: rotateX(0deg) rotateY(0deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f9f9f9;
+    }
+    .container {
+      position: relative;
+      display: inline-block;
+    }
+    .triangle {
+      display: inline-block;
+      text-align: center;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .row {
+      display: flex;
+      justify-content: center;
+    }
+    .cell {
+      width: 35px;
+      height: 35px;
+      margin: 3px;
+      border-radius: 5px;
+      line-height: 35px;
+      font-weight: bold;
+      background: #e0e0e0;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .highlight {
+      transform: scale(1.2);
+      box-shadow: 0 0 8px #000;
+      z-index: 3;
+    }
+    .fibonacci-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .fib-cell {
+      width: 35px;
+      height: 35px;
+      border-radius: 5px;
+      line-height: 35px;
+      font-weight: bold;
+      background: #ffd166;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fib-cell:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px #000;
+    }
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    line {
+      transition: stroke-width 0.2s;
+    }
+    line.highlight {
+      stroke-width: 4;
+    }
+    #contain button{
+       background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    #contain input{
+        padding: 0.7rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--accent);
+      border-radius: var(--radius);
+      outline: none;
+      margin-right: 1rem;
+    }
+    #contain{
+      padding: 100px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>Pascal & Phi</h1>
+    <ul>
+      <li><a href="#generator">Pascal's Triangle</a></li>
+      <li><a href="#golden">Golden Ratio</a></li>
+      <li><a href="#contain">Fibonacci Series</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-size: 3rem; position: relative; left: -200px;">
+        Explore the Beauty of Pascal's Triangle<br>&<br>The Golden Ratio(Phi)</h2>
+      <p style="position: relative; left:-200px">Math meets Art – where numbers reveal hidden patterns and nature’s secrets.</p>
+      <div class="cube-container">
+        <div class="cube">
+        <div class="face front">φ</div>
+      <div class="face back">π</div>
+      <div class="face right">Σ</div>
+      <div class="face left">∞</div>
+      <div class="face top">Φ</div>
+      <div class="face bottom">Δ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="card">
+      <h3>Triangle Generator</h3>
+      <p>Dynamically create Pascal's Triangle up to any number of rows.</p>
+    </div>
+    <div class="card">
+      <h3>Fibonacci Hidden</h3>
+      <p>Discover how Fibonacci numbers emerge from the diagonals.</p>
+    </div>
+    <div class="card">
+      <h3>Golden Ratio</h3>
+      <p>Understand how the golden ratio (1.618...) appears in Pascal’s triangle.</p>
+    </div>
+  </section>
+
+  <section class="generator" id="generator">
+    <h2>Pascal's Triangle Generator</h2><br><br>
+    <input type="number" id="terms" min="1" max="20" placeholder="Enter number of rows" />
+    <button onclick="generateTriangle()">Generate</button>
+    <div class="output" id="output"></div>
+  </section>
+
+  <section class="golden-ratio" id="golden">
+    <h2>The Golden Ratio in Nature</h2>
+    <p>From sunflowers to galaxies, the golden ratio is found everywhere. Pascal’s Triangle encodes Fibonacci numbers that approximate this divine proportion.</p>
+  </section>
+  <div id="contain">
+    <h1>Fibonacci from Pascal's Triangle (Interactive)</h1>
+    <br><br>
+    <input type="number" id="count" value="7" min="1" placeholder="Enter n" max="20">
+  <button onclick="generate()">Generate</button><br>
+
+  <div class="container">
+    <div class="triangle" id="triangle"></div>
+    <svg id="arrows"></svg>
+    <div class="fibonacci-row" id="fibRow"></div>
+  </div>
+  </div>
+  <footer>
+    &copy; 2025 Pascal & Phi. All Rights Reserved.
+  </footer>
+
+  <script>
+    function generateTriangle() {
+      const n = parseInt(document.getElementById("terms").value);
+      const output = document.getElementById("output");
+      if (!n || n < 1 || n > 50) {
+        output.innerText = "Enter a valid number between 1 and 50.";
+        return;
+      }
+      let result = "";
+      for (let i = 0; i < n; i++) {
+        let row = "";
+        let val = 1;
+        row += " ".repeat(n - i);
+        for (let j = 0; j <= i; j++) {
+          row += val + " ";
+          val = (val * (i - j)) / (j + 1);
+        }
+        result += row.trim() + "\n";
+      }
+      output.innerText = result;
+    }
+  </script>
+
+  <script>
+    function generate() {
+      const n = parseInt(document.getElementById("count").value);
+      const triangleDiv = document.getElementById("triangle");
+      const fibRow = document.getElementById("fibRow");
+      const svg = document.getElementById("arrows");
+      triangleDiv.innerHTML = "";
+      fibRow.innerHTML = "";
+      svg.innerHTML = "";
+
+      const colors = ["#f94144","#f3722c","#f8961e","#f9844a","#90be6d","#43aa8b","#577590","#6a4c93"];
+      let pascal = [], cells = [], arrows = [];
+
+      // Build Pascal's Triangle
+      for (let i = 0; i < n; i++) {
+        pascal[i] = [];
+        cells[i] = [];
+        const row = document.createElement("div");
+        row.className = "row";
+
+        for (let j = 0; j <= i; j++) {
+          if (j === 0 || j === i) pascal[i][j] = 1;
+          else pascal[i][j] = pascal[i-1][j-1] + pascal[i-1][j];
+
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.textContent = pascal[i][j];
+          cell.dataset.diagonal = i - j; // store diagonal ID
+          cell.style.background = colors[(i-j + colors.length) % colors.length];
+          row.appendChild(cell);
+          cells[i][j] = cell;
+        }
+        triangleDiv.appendChild(row);
+      }
+
+      // Fibonacci numbers
+      const fib = [];
+      for (let k = 0; k < n; k++) {
+        let sum = 0;
+        for (let i = 0; i <= k; i++) {
+          if (pascal[i][k-i] !== undefined) sum += pascal[i][k-i];
+        }
+        fib.push(sum);
+      }
+
+      // Fibonacci row
+      fib.forEach((num, index) => {
+        const fibCell = document.createElement("div");
+        fibCell.className = "fib-cell";
+        fibCell.textContent = num;
+        fibCell.dataset.index = index;
+        fibCell.style.background = colors[index % colors.length];
+        fibRow.appendChild(fibCell);
+      });
+
+      // Draw arrows
+      setTimeout(() => {
+        const triangleRect = triangleDiv.getBoundingClientRect();
+        const fibRect = fibRow.getBoundingClientRect();
+        svg.setAttribute("width", triangleRect.width);
+        svg.setAttribute("height", fibRect.bottom - triangleRect.top + 10);
+
+        for (let k = 0; k < n; k++) {
+          const diagCells = [];
+          for (let i = 0; i <= k; i++) {
+            if (pascal[i][k - i] !== undefined) diagCells.push(cells[i][k - i]);
+          }
+          if (diagCells.length > 0) {
+            const firstRect = diagCells[0].getBoundingClientRect();
+            const lastRect = diagCells[diagCells.length - 1].getBoundingClientRect();
+            const midX = (firstRect.left + lastRect.left + lastRect.width) / 2 - triangleRect.left;
+            const midY = (firstRect.top + lastRect.top + lastRect.height) / 2 - triangleRect.top;
+
+            const targetRect = fibRow.children[k].getBoundingClientRect();
+            const targetX = targetRect.left + targetRect.width / 2 - triangleRect.left;
+            const targetY = targetRect.top - triangleRect.top;
+
+            const arrow = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            arrow.setAttribute("x1", midX);
+            arrow.setAttribute("y1", midY);
+            arrow.setAttribute("x2", targetX);
+            arrow.setAttribute("y2", targetY);
+            arrow.setAttribute("stroke", colors[k % colors.length]);
+            arrow.setAttribute("stroke-width", 2);
+            arrow.dataset.index = k;
+            svg.appendChild(arrow);
+            arrows.push(arrow);
+          }
+        }
+
+        // Arrowhead marker
+        const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        defs.innerHTML = `
+          <marker id="arrowhead" markerWidth="10" markerHeight="7"
+            refX="5" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+          </marker>`;
+        svg.appendChild(defs);
+
+        // Hover interaction
+        fibRow.querySelectorAll(".fib-cell").forEach((fibCell) => {
+          fibCell.addEventListener("mouseenter", () => {
+            const idx = parseInt(fibCell.dataset.index);
+            arrows[idx].classList.add("highlight");
+            // Highlight diagonal cells
+            for (let i = 0; i <= idx; i++) {
+              if (pascal[i][idx - i] !== undefined) {
+                cells[i][idx - i].classList.add("highlight");
+              }
+            }
+          });
+          fibCell.addEventListener("mouseleave", () => {
+            const idx = parseInt(fibCell.dataset.index);
+            arrows[idx].classList.remove("highlight");
+            // Remove highlight
+            for (let i = 0; i <= idx; i++) {
+              if (pascal[i][idx - i] !== undefined) {
+                cells[i][idx - i].classList.remove("highlight");
+              }
+            }
+          });
+        });
+      }, 50);
+    }
+
+    generate();
+  </script>
+</body>
+</html>
